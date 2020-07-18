@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from core.models import Game
 from utils.words import words, get_random_word
-from utils.play import check_if_won, check_if_lost, verify_guess
+from utils.play import check_if_won, check_if_lost, verify_guess, write_board
 
 from api.serializer import GameSerializer
 
@@ -32,7 +32,8 @@ class Start(APIView):
                 difficulty=difficulty,
                 secret_word=secret_word,
                 secret_set=secret_set,
-                max_guesses=MAX_GUESSES
+                max_guesses=MAX_GUESSES,
+                board=write_board("", secret_word)
             )
             data = GameSerializer(game).data
             data.pop('secret_word')
@@ -106,6 +107,7 @@ class Guess(APIView):
 
             game.missed_letters = missed_letters
             game.correct_letters = correct_letters
+            game.board = write_board(correct_letters, secret_word)
             game.save()
 
             data = GameSerializer(game).data
