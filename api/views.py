@@ -36,8 +36,7 @@ class Start(APIView):
                 board=write_board("", secret_word)
             )
             data = GameSerializer(game).data
-            data.pop('secret_word')
-            return Response(data, status=status.HTTP_200_OK)
+            return Response({'id': data['id']}, status=status.HTTP_200_OK)
         else:
             message = {'difficulty': 'Invalid value set for difficulty. E - Easy, M - Medium, H - Hard'}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
