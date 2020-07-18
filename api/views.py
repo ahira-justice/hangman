@@ -13,10 +13,10 @@ from api.serializer import GameSerializer
 class Start(APIView):
     def post(self, request):
         MAX_GUESSES = 8
-        difficulty = request.data.pop('difficulty')
+        difficulty = request.data.pop('difficulty', None)
 
         if difficulty is None:
-            message = {'difficulty': 'Invalid value set for difficulty. E - Easy, M - Medium, H - Hard'}
+            message = {'difficulty': 'Please provide a value for difficulty'}
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         difficulty = difficulty.upper()
@@ -37,14 +37,25 @@ class Start(APIView):
             data = GameSerializer(game).data
             data.pop('secret_word')
             return Response(data, status=status.HTTP_200_OK)
+        else:
+            message = {'difficulty': 'Invalid value set for difficulty. E - Easy, M - Medium, H - Hard'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GetState(APIView):
     def post(self, request):
+        id = request.data.pop('id', None)
+
+        if id is None:
+            message = {'id': 'Please provide a value for id'}
+            return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            game = Game.objects.get(id=request.data['id'])
+            game = Game.objects.get(id=id)
             data = GameSerializer(game).data
-            data.pop('secret_word')
+            if not game.is_done:
+                data.pop('secret_word')
+
             return Response(data, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             message = {'id': 'Game with provided id does not exist'}
@@ -56,8 +67,13 @@ class Guess(APIView):
         id = request.data.pop('id', None)
         guess = request.data.pop('guess', None)
 
+        message = {}
+        if id is None:
+            message['id'] = 'Please provide a value for id'
         if guess is None:
-            message = {'guess': 'Please provide a guess'}
+            message['guess'] = 'Please provide a value for guess'
+
+        if message:
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
         try:
