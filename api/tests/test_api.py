@@ -1,5 +1,3 @@
-import re
-from re import T
 from django.test import TestCase
 from django.urls import reverse
 
