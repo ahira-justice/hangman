@@ -102,15 +102,19 @@ There is a `"secret_word"` field which is ommitted from responses when the game 
 
 ##### 400 BAD REQUEST
 
-A request with an invalid option for id or no id field at all recieves a response of `400 BAD REQUEST`
+A request with no id field recieves a response of `400 BAD REQUEST`
 
 ```sh
 {
     "id": "Please provide a value for id"
 }
+```
 
-OR
+##### 404 NOT FOUND
 
+A request with an invalid option for id recieves a response of `404 NOT FOUND`
+
+```sh
 {
     "id": "Game with provided id does not exist"
 }
@@ -170,14 +174,6 @@ A request with no id field and/or no guess field recieves a response of `400 BAD
 }
 ```
 
-A request with an invalid option for id recieves a response of `400 BAD REQUEST`.
-
-```sh
-{
-    "id": "Game with provided id does not exist"
-}
-```
-
 A request with an invalid option for guess recieves a response of `400 BAD REQUEST`.
 
 ```sh
@@ -195,6 +191,24 @@ OR
 
 {
     "guess": "Please enter a LETTER"
+}
+```
+
+A request to the `/api/guess` endpoint when the game is over recieves a response of `400 BAD REQUEST`.
+
+```sh
+{
+    "message": "Game is over"
+}
+```
+
+##### 404 NOT FOUND
+
+A request with an invalid option for id recieves a response of `404 NOT FOUND`.
+
+```sh
+{
+    "id": "Game with provided id does not exist"
 }
 ```
 
