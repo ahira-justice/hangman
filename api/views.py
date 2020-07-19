@@ -1,6 +1,8 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 
 from core.models import Game
@@ -8,6 +10,10 @@ from utils.words import words, get_random_word
 from utils.play import check_if_won, check_if_lost, verify_guess, write_board
 
 from api.serializer import GameSerializer
+
+
+def index(request):
+    return render(request, 'api/index.html')
 
 
 class Start(APIView):

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Hangman API</title>
+</head>
+
+<body>
+    <h1 id="rpc-hangman">rpc-hangman</h1>
+    <p>rpc-hangman is a RPC API for hosting simple hangman games. You could play in Postman, your browser, or build your
+        own
+        client to consume the rpc-hangman API.</p>
+    <p>You can also clone this repo and host your own server.</p>
+    <h2 id="endpoints">Endpoints</h2>
+    <h3 id="apistart">/api/start</h3>
+    <p>This endpoint begins a new game and returns a game ID. The game ID is a 5 length string which serves as a unique
+        identifier for each game.</p>
+    <p>This endpoint accepts <code>POST</code> requests only.</p>
+    <h4 id="request">Request</h4>
+    <pre class="sh"><code>Header          Value
+Content-Type    application/json</code></pre>
+    <pre class="sh"><code>Body
+{
+    &quot;difficulty&quot;: &quot;E&quot;
+}
+</code></pre>
+    <p><code>&quot;difficulty&quot;</code> can be assigned any one of <code>&quot;E&quot;</code>,
+        <code>&quot;M&quot;</code>, and <code>&quot;H&quot;</code> for Easy, Medium, and Hard respectively.</p>
+    <h4 id="response">Response</h4>
+    <h5 id="ok">200 OK</h5>
+    <p>A <code>200 OK</code> response is recieved when the request difficulty is a valid option.</p>
+    <pre class="sh"><code>{
+    &quot;id&quot;: &quot;erkL7&quot;
+}
+</code></pre>
+    <h5 id="bad-request">400 BAD REQUEST</h5>
+    <p>A request with an invalid option for difficulty or no difficulty field at all recieves a response of <code>400
+            BAD
+            REQUEST</code>.</p>
+    <pre class="sh"><code>{
+    &quot;difficulty&quot;: &quot;Please provide a value for difficulty&quot;
+}
+
+OR
+
+{
+    &quot;difficulty&quot;: &quot;Invalid value set for difficulty. E - Easy, M - Medium, H - Hard&quot;
+}
+</code></pre>
+    <h3 id="apistate">/api/state</h3>
+    <p>This endpoint gives the current state of a game.</p>
+    <p>This endpoint accepts <code>POST</code> requests only.</p>
+    <h4 id="request-1">Request</h4>
+    <pre class="sh"><code>Header          Value
+Content-Type    application/json</code></pre>
+    <pre class="sh"><code>Body
+{
+    &quot;id&quot;: &quot;erkL7&quot;
+}
+</code></pre>
+    <p><code>&quot;id&quot;</code> should be assigned the game ID value gotten when a new game is started.</p>
+    <h4 id="response-1">Response</h4>
+    <h5 id="ok-1">200 OK</h5>
+    <p>A <code>200 OK</code> response is recieved when a game with the given ID exists.</p>
+    <pre class="sh"><code>{
+    &quot;id&quot;: &quot;erkL7&quot;,
+    &quot;difficulty&quot;: &quot;E&quot;,
+    &quot;missed_letters&quot;: &quot;&quot;,
+    &quot;correct_letters&quot;: &quot;&quot;,
+    &quot;max_guesses&quot;: 8,
+    &quot;board&quot;: &quot;______&quot;,
+    &quot;secret_set&quot;: &quot;Animals&quot;,
+    &quot;is_done&quot;: false,
+    &quot;result&quot;: &quot;&quot;
+}
+</code></pre>
+    <p>There is a <code>&quot;secret_word&quot;</code> field which is ommitted from responses when the game is not over
+        <code>(is_done = false)</code>. If the game is over, <code>&quot;is_done&quot;</code> is set to
+        <code>true</code>,
+        <code>&quot;result&quot;</code> is set to <code>&quot;W&quot;</code> or <code>&quot;L&quot;</code> to signify
+        Win or
+        Lose, and the secret word is provided in the response.</p>
+    <h5 id="bad-request-1">400 BAD REQUEST</h5>
+    <p>A request with no id field recieves a response of <code>400 BAD REQUEST</code></p>
+    <pre class="sh"><code>{
+    &quot;id&quot;: &quot;Please provide a value for id&quot;
+}
+</code></pre>
+    <h5 id="not-found">404 NOT FOUND</h5>
+    <p>A request with an invalid option for id recieves a response of <code>404 NOT FOUND</code></p>
+    <pre class="sh"><code>{
+    &quot;id&quot;: &quot;Game with provided id does not exist&quot;
+}
+</code></pre>
+    <h3 id="apiguess">/api/guess</h3>
+    <p>This endpoint takes a guess and checks if it is correct, registers a correct letter or missed letter, and checks
+        if
+        the game is won or lost. It returns an identical response body as <code>/api/state</code> does, except it
+        carries
+        out a state transition before returning a response.</p>
+    <p>This endpoint accepts <code>POST</code> requests only.</p>
+    <h4 id="request-2">Request</h4>
+    <pre class="sh"><code>Header          Value
+Content-Type    application/json</code></pre>
+    <pre class="sh"><code>Body
+{
+    &quot;id&quot;: &quot;erkL7&quot;,
+    &quot;guess&quot;: &quot;a&quot;
+}
+</code></pre>
+    <p><code>&quot;id&quot;</code> should be assigned the game ID value gotten when a new game is started.
+        <code>&quot;guess&quot;</code> should be assigned a single letter.</p>
+    <h4 id="response-2">Response</h4>
+    <h5 id="ok-2">200 OK</h5>
+    <p>A <code>200 OK</code> response is recieved when a game with the given ID exists, and a valid guess is supplied.
+    </p>
+    <pre class="sh"><code>{
+    &quot;id&quot;: &quot;erkL7&quot;,
+    &quot;difficulty&quot;: &quot;E&quot;,
+    &quot;missed_letters&quot;: &quot;&quot;,
+    &quot;correct_letters&quot;: &quot;a&quot;,
+    &quot;max_guesses&quot;: 8,
+    &quot;board&quot;: &quot;_a____&quot;,
+    &quot;secret_set&quot;: &quot;Animals&quot;,
+    &quot;is_done&quot;: false,
+    &quot;result&quot;: &quot;&quot;
+}
+</code></pre>
+    <h5 id="bad-request-2">400 BAD REQUEST</h5>
+    <p>A request with no id field and/or no guess field recieves a response of <code>400 BAD REQUEST</code>.</p>
+    <pre class="sh"><code>{
+    &quot;id&quot;: &quot;Please provide a value for id&quot;,
+    &quot;guess&quot;: &quot;Please provide a value for guess&quot;
+}
+</code></pre>
+    <p>A request with an invalid option for guess recieves a response of <code>400 BAD REQUEST</code>.</p>
+    <pre class="sh"><code>{
+    &quot;guess&quot;: &quot;Please enter a single letter&quot;
+}
+
+OR
+
+{
+    &quot;guess&quot;: &quot;You have already guessed that letter&quot;
+}
+
+OR
+
+{
+    &quot;guess&quot;: &quot;Please enter a LETTER&quot;
+}
+</code></pre>
+    <p>A request to the <code>/api/guess</code> endpoint when the game is over recieves a response of <code>400 BAD
+            REQUEST</code>.</p>
+    <pre class="sh"><code>{
+    &quot;message&quot;: &quot;Game is over&quot;
+}
+</code></pre>
+    <h5 id="not-found-1">404 NOT FOUND</h5>
+    <p>A request with an invalid option for id recieves a response of <code>404 NOT FOUND</code>.</p>
+    <pre class="sh"><code>{
+    &quot;id&quot;: &quot;Game with provided id does not exist&quot;
+}
+</code></pre>
+    <h2 id="hosting-your-own-server">Hosting your own server</h2>
+    <p>Clone the <code>rpc-hangman</code> repo.</p>
+    <pre class="sh"><code>git clone https://github.com/ahira-justice/rpc-hangman.git</code></pre>
+    <p>In <code>.gitlab-ci.yml</code> and <code>app/settings.py</code>, there is a default configuration for a heroku
+        deployment. Leave <code>Procfile</code> and <code>runtime.txt</code> as is.</p>
+    <p>Set a gitlab remote repo,</p>
+    <pre class="sh"><code>git remote add ciorigin https://gitlab.com/example/rpc-hangman.git</code></pre>
+    <p>In your gitlab CI/CD settings, configure three environment variables, <code>SECRET_KEY</code>,
+        <code>APP_NAME</code>,
+        and <code>HEROKU_STAGING_API_KEY</code>.</p>
+    <p>In your heroku app settings, configure <code>SECRET_KEY</code> and <code>SITE_URL</code>.</p>
+    <p>Push to <code>ciorigin</code>,</p>
+    <pre class="sh"><code>git push ciorigin</code></pre>
+    <p>The CI/CD workflow will deploy to your heroku app after passing the <code>test</code> stage.</p>
+    <p>If you want to deploy to your own VPS or a different cloud platform, modify <code>.gitlab-ci.yml</code> and/or
+        <code>app/settings</code> as you see fit.</p>
+    <h2 id="dependencies">Dependencies</h2>
+    <p>A full list of dependencies is found in <code>requirements.txt</code></p>
+    <h2 id="license">License</h2>
+    <p><a href="https://github.com/ahira-justice/rpc-hangman/blob/master/LICENSE">GNU GENERAL PUBLIC LICENSE</a></p>
+</body>
