@@ -13,7 +13,7 @@ from api.serializer import GameSerializer
 class Start(APIView):
     def post(self, request):
         MAX_GUESSES = 8
-        difficulty = request.data.pop('difficulty', None)
+        difficulty = request.data.get('difficulty', None)
 
         if difficulty is None:
             message = {'difficulty': 'Please provide a value for difficulty'}
@@ -44,7 +44,7 @@ class Start(APIView):
 
 class GetState(APIView):
     def post(self, request):
-        id = request.data.pop('id', None)
+        id = request.data.get('id', None)
 
         if id is None:
             message = {'id': 'Please provide a value for id'}
@@ -64,8 +64,8 @@ class GetState(APIView):
 
 class Guess(APIView):
     def post(self, request):
-        id = request.data.pop('id', None)
-        guess = request.data.pop('guess', None)
+        id = request.data.get('id', None)
+        guess = request.data.get('guess', None)
 
         message = {}
         if id is None:
