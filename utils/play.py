@@ -4,9 +4,9 @@ def verify_guess(guess, already_guessed):
     if len(guess) != 1:
         message = {'guess': 'Please enter a single letter'}
     elif guess in already_guessed:
-        message = {'message': 'You have already guessed that letter'}
+        message = {'guess': 'You have already guessed that letter'}
     elif guess not in 'abcdefghijklmnopqrstuvwxyz':
-        message = {'message': 'Please enter a LETTER'}
+        message = {'guess': 'Please enter a LETTER'}
 
     return message
 
