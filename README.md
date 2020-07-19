@@ -182,7 +182,19 @@ A request with an invalid option for guess recieves a response of `400 BAD REQUE
 
 ```sh
 {
-    "guess": "Please provide a value for guess"
+    "guess": "Please enter a single letter"
+}
+
+OR
+
+{
+    "guess": "You have already guessed that letter"
+}
+
+OR
+
+{
+    "guess": "Please enter a LETTER"
 }
 ```
 
