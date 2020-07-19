@@ -162,24 +162,6 @@ OR
     &quot;id&quot;: &quot;Game with provided id does not exist&quot;
 }
 </code></pre>
-    <h2 id="hosting-your-own-server">Hosting your own server</h2>
-    <p>Clone the <code>rpc-hangman</code> repo.</p>
-    <pre class="sh"><code>git clone https://github.com/ahira-justice/rpc-hangman.git</code></pre>
-    <p>In <code>.gitlab-ci.yml</code> and <code>app/settings.py</code>, there is a default configuration for a heroku
-        deployment. Leave <code>Procfile</code> and <code>runtime.txt</code> as is.</p>
-    <p>Set a gitlab remote repo,</p>
-    <pre class="sh"><code>git remote add ciorigin https://gitlab.com/example/rpc-hangman.git</code></pre>
-    <p>In your gitlab CI/CD settings, configure three environment variables, <code>SECRET_KEY</code>,
-        <code>APP_NAME</code>,
-        and <code>HEROKU_STAGING_API_KEY</code>.</p>
-    <p>In your heroku app settings, configure <code>SECRET_KEY</code> and <code>SITE_URL</code>.</p>
-    <p>Push to <code>ciorigin</code>,</p>
-    <pre class="sh"><code>git push ciorigin</code></pre>
-    <p>The CI/CD workflow will deploy to your heroku app after passing the <code>test</code> stage.</p>
-    <p>If you want to deploy to your own VPS or a different cloud platform, modify <code>.gitlab-ci.yml</code> and/or
-        <code>app/settings</code> as you see fit.</p>
-    <h2 id="dependencies">Dependencies</h2>
-    <p>A full list of dependencies is found in <code>requirements.txt</code></p>
     <h2 id="license">License</h2>
     <p><a href="https://github.com/ahira-justice/rpc-hangman/blob/master/LICENSE">GNU GENERAL PUBLIC LICENSE</a></p>
 </body>
