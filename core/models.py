@@ -15,3 +15,6 @@ class Game(models.Model):
     secret_set = models.CharField(max_length=255)
     is_done = models.BooleanField(default=False)
     result = models.CharField(max_length=1, blank=True)
+
+    def __str__(self):
+        return self.id
