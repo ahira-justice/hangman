@@ -1,6 +1,6 @@
-# rpc-hangman
+# hangman
 
-rpc-hangman is a RPC API for hosting simple hangman games. You could play in Postman, your browser, or build your own client to consume the rpc-hangman API.
+hangman is a RPC API for hosting simple hangman games. You could play in Postman, your browser, or build your own client to consume the hangman API.
 
 You can also clone this repo and host your own server.
 
@@ -214,10 +214,10 @@ A request with an invalid option for id recieves a response of `404 NOT FOUND`.
 
 ## Hosting your own server
 
-Clone the `rpc-hangman` repo.
+Clone the `hangman` repo.
 
 ```sh
-git clone https://github.com/ahira-justice/rpc-hangman.git
+git clone https://github.com/ahira-justice/hangman.git
 ```
 
 In `.gitlab-ci.yml` and `app/settings.py`, there is a default configuration for a heroku deployment. Leave `Procfile` and `runtime.txt` as is.
@@ -225,7 +225,7 @@ In `.gitlab-ci.yml` and `app/settings.py`, there is a default configuration for 
 Set a gitlab remote repo,
 
 ```sh
-git remote add ciorigin https://gitlab.com/example/rpc-hangman.git
+git remote add ciorigin https://gitlab.com/example/hangman.git
 ```
 
 In your gitlab CI/CD settings, configure three environment variables, `SECRET_KEY`, `APP_NAME`, and `HEROKU_STAGING_API_KEY`.
